@@ -1,2 +1,2 @@
 # Notes
- 笔记
+java 笔记
