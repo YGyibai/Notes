@@ -325,7 +325,7 @@ SringMVC中web.xml的dispatcherServlet的  < url-pattern>：
 
 **解决的办法：**
 
-  在这种情况下，如果想要访问静态资源，通常会使用默认handler：
+在这种情况下，如果想要访问静态资源，通常会使用默认handler：
 
 ```java
 <mvc:default-servlet-handler/>
