@@ -66,6 +66,7 @@
   #### 映射
   map：接受一个函数作为参数，该函数应用到每一个元素上，并将其映射成一个新的元素
   flatMap：接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流。
+
   ```java
       List<String> list1 = Arrays.asList("1,2,3","a,b,c");
       //将每一个元素转换成一个新的且不带逗号的元素
@@ -213,7 +214,7 @@
   映射，可以将一个流的元素按照一定的映射规则映射到另一个流中。分为map和flatMap：
   - map：接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素。
   - flatMap：接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流。
-  
+
  案例一：英文字符串数组的元素全部改为大写。整数数组每个元素+3。
   ```java
     String[] strArr = { "abcd", "bcdd", "defde", "fTr" };
@@ -255,6 +256,7 @@
   ```
 
 #### 归约(reduce)
+
 归约，也称缩减，顾名思义，是把一个流缩减成一个值，能实现对集合求和、求乘积和求最值操作。
 
 案例一：求Integer集合的元素之和、乘积和最大值。
@@ -337,7 +339,8 @@ collect主要依赖java.util.stream.Collectors类内置的静态方法。
   > 求和：summingInt、summingLong、summingDouble
   > 统计以上所有：summarizingInt、summarizingLong、summarizingDouble
   案例：统计员工人数、平均工资、工资总额、最高工资。
-  ```java
+  
+	```java
 		List<Person> personList = new ArrayList<Person>();
 		personList.add(new Person("Tom", 8900, 23, "male", "New York"));
 		personList.add(new Person("Jack", 7000, 25, "male", "Washington"));
@@ -353,12 +356,12 @@ collect主要依赖java.util.stream.Collectors类内置的静态方法。
 		Integer sum = personList.stream().collect(Collectors.summingInt(Person::getSalary));
 		// 一次性统计所有信息
 		DoubleSummaryStatistics collect = personList.stream().collect(Collectors.summarizingDouble(Person::getSalary));
-
+	
 		System.out.println("员工总数：" + count);
 		System.out.println("员工平均工资：" + average);
 		System.out.println("员工工资总和：" + sum);
 		System.out.println("员工工资所有统计：" + collect);
-  ```
+  ```java
   ##### 分组(partitioningBy/groupingBy)
   分区：将stream按条件分为两个Map，比如员工按薪资是否高于8000分为两部分。
   分组：将集合分为多个Map，比如员工按性别分组。有单级分组和多级分组。
