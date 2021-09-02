@@ -4,11 +4,68 @@
     1.中间操作，每次返回一个新的流，可以有多个
     2.终端操作，每个流只能进行一次终端操作，终端操作结束后流无法再次使用，终端会产生一个新的集合或值
   **Stream特性：**
+
   - stream不存储数据，而是按照特定的规则对数据进行计算，一般会输出结果。
+
   - stream不会改变数据源，通常情况下会产生一个新的集合或一个值。
+
   - stream具有延迟执行特性，只有调用终端操作时，中间操作才会执行。
 
+### stream API
+
+| Stream操作分类                    |                            |                                                              |
+| --------------------------------- | -------------------------- | ------------------------------------------------------------ |
+| 中间操作(Intermediate operations) | 无状态(Stateless)          | unordered() filter() map() mapToInt() mapToLong() mapToDouble() flatMap() flatMapToInt() flatMapToLong() flatMapToDouble() peek() |
+|                                   | 有状态(Stateful)           | distinct() sorted() sorted() limit() skip()                  |
+| 结束操作(Terminal operations)     | 非短路操作                 | forEach() forEachOrdered() toArray() reduce() collect() max() min() count() |
+|                                   | 短路操作(short-circuiting) | anyMatch() allMatch() noneMatch() findFirst() findAny()      |
+
+stream上的所有操作分为两类：中间操作和结束操作。中间操作是一种标识，只有结束操作才会触发实际计算。中间操作又可以分为无状态（stateless）和有状态（stateful）。无状态中间操作是指元素的处理不受前面元素的影响，而有状态的中间操作必须等到所有元素处理之后才知道最终结果，比如排序是有状态操作，在读取所有元素之前并不能确定排序结果；结束操作又可以分为短路操作和非短路操作，短路操作是指不用处理全部元素就可以返回结果，比如*找到第一个满足条件的元素*。之所以要进行如此精细的划分，是因为底层对每一种情况的处理方式不同。
+
+原始写法：
+
+```java
+int longest = 0;
+for(String str : strings){
+    if(str.startsWith("A")){// 1. filter(), 保留以A开头的字符串
+        int len = str.length();// 2. mapToInt(), 转换成长度
+        longest = Math.max(len, longest);// 3. max(), 保留最长的长度
+    }
+}
+
+```
+
+stream写法：
+
+```java
+int number = Arrays.stream(strings)
+                .filter(s -> s.startsWith("A"))
+                .mapToInt(String::length)
+                .max().getAsInt();
+```
+
+
+
+### stream原理
+
+一种直白的实现方式：每一次操作都执行一次迭代，有几种操作就执行几次迭代，并将处理结果存放到某种数据结构中。
+
+#### Stream流水线解决方案：
+
+我们大致能够想到，应该采用某种方式记录用户每一步的操作，当用户调用结束操作时将之前记录的操作叠加到一起在一次迭代中全部执行掉。沿着这个思路，有几个问题需要解决
+
+​	1.用户操作如何记录？
+
+​	2.操作如何叠加？
+
+​	3.叠加之后如何执行？
+
+​	4.执行后的结果（如果有）存放在哪里？
+
+[原理篇](https://www.cnblogs.com/CarpenterLee/p/6637118.html)
+
 ### 流的创建
+
   > Stream流分为**Stream(顺序流)**和**parallelStream(并行流)**两种创建方式
   > stream是顺序流，由主线程按顺序对流执行操作，而parallelStream是并行流，内部以多线程并行执行的方式对流进行操作，但> 前提是流中的数据处理没有顺序要求。如果流中的数据量足够大，并行流可以加快处速度。
   <font color="red">可以通过paralle()方法将顺序流转化成并行流</font>
@@ -339,13 +396,13 @@ collect主要依赖java.util.stream.Collectors类内置的静态方法。
   > 求和：summingInt、summingLong、summingDouble
   > 统计以上所有：summarizingInt、summarizingLong、summarizingDouble
   案例：统计员工人数、平均工资、工资总额、最高工资。
-  
+
 	```java
 		List<Person> personList = new ArrayList<Person>();
 		personList.add(new Person("Tom", 8900, 23, "male", "New York"));
 		personList.add(new Person("Jack", 7000, 25, "male", "Washington"));
 		personList.add(new Person("Lily", 7800, 21, "female", "Washington"));
-
+	
 		// 求总数
 		Long count = personList.stream().collect(Collectors.counting());
 		// 求平均工资
