@@ -1,4 +1,5 @@
 ### 概述
+
   Stream 是java8 中处理集合的关键抽象概念，可以对集合进行操作，可以执行非常复杂的查找、过滤和映射数据等操作。简单来说Stream是一种高效且易于使用的处理数据的方式。
   **流操作分为两种；**
     1.中间操作，每次返回一个新的流，可以有多个
@@ -397,53 +398,36 @@ collect主要依赖java.util.stream.Collectors类内置的静态方法。
   > 统计以上所有：summarizingInt、summarizingLong、summarizingDouble
   案例：统计员工人数、平均工资、工资总额、最高工资。
 
-	```java
-		List<Person> personList = new ArrayList<Person>();
-		personList.add(new Person("Tom", 8900, 23, "male", "New York"));
-		personList.add(new Person("Jack", 7000, 25, "male", "Washington"));
-		personList.add(new Person("Lily", 7800, 21, "female", "Washington"));
-	
-		// 求总数
-		Long count = personList.stream().collect(Collectors.counting());
-		// 求平均工资
-		Double average = personList.stream().collect(Collectors.averagingDouble(Person::getSalary));
-		// 求最高工资
-		Optional<Integer> max = personList.stream().map(Person::getSalary).collect(Collectors.maxBy(Integer::compare));
-		// 求工资之和
-		Integer sum = personList.stream().collect(Collectors.summingInt(Person::getSalary));
-		// 一次性统计所有信息
-		DoubleSummaryStatistics collect = personList.stream().collect(Collectors.summarizingDouble(Person::getSalary));
-	
-		System.out.println("员工总数：" + count);
-		System.out.println("员工平均工资：" + average);
-		System.out.println("员工工资总和：" + sum);
-		System.out.println("员工工资所有统计：" + collect);
-  ```java
-  ##### 分组(partitioningBy/groupingBy)
+```java
+
+	List<Person> personList = new ArrayList<Person>();
+	personList.add(new Person("Tom", 8900, 23, "male", "New York"));
+	personList.add(new Person("Jack", 7000, 25, "male", "Washington"));
+	personList.add(new Person("Lily", 7800, 21, "female", "Washington"));
+
+	// 求总数
+	Long count = personList.stream().collect(Collectors.counting());
+	// 求平均工资
+	Double average = personList.stream().collect(Collectors.averagingDouble(Person::getSalary));
+	// 求最高工资
+	Optional<Integer> max = personList.stream().map(Person::getSalary).collect(Collectors.maxBy(Integer::compare));
+	// 求工资之和
+	Integer sum = personList.stream().collect(Collectors.summingInt(Person::getSalary));
+	// 一次性统计所有信息
+	DoubleSummaryStatistics collect = personList.stream().collect(Collectors.summarizingDouble(Person::getSalary));
+
+	System.out.println("员工总数：" + count);
+	System.out.println("员工平均工资：" + average);
+	System.out.println("员工工资总和：" + sum);
+	System.out.println("员工工资所有统计：" + collect);
+```
+#####  分组(partitioningBy/groupingBy)
+
   分区：将stream按条件分为两个Map，比如员工按薪资是否高于8000分为两部分。
   分组：将集合分为多个Map，比如员工按性别分组。有单级分组和多级分组。
 
-  案例：将员工按薪资是否高于8000分为两部分；将员工按性别和地区分组
-  ```java
-    List<Person> personList = new ArrayList<Person>();
-    personList.add(new Person("Tom", 8900, "male", "New York"));
-    personList.add(new Person("Jack", 7000, "male", "Washington"));
-    personList.add(new Person("Lily", 7800, "female", "Washington"));
-    personList.add(new Person("Anni", 8200, "female", "New York"));
-    personList.add(new Person("Owen", 9500, "male", "New York"));
-    personList.add(new Person("Alisa", 7900, "female", "New York"));
+  案例：将员工按薪资是否高于8000分为两部分；将员工按性别和地区分组接合(joining)
 
-    // 将员工按薪资是否高于8000分组
-    Map<Boolean, List<Person>> part = personList.stream().collect(Collectors.partitioningBy(x -> x.getSalary() > 8000));
-    // 将员工按性别分组
-    Map<String, List<Person>> group = personList.stream().collect(Collectors.groupingBy(Person::getSex));
-    // 将员工先按性别分组，再按地区分组
-    Map<String, Map<String, List<Person>>> group2 = personList.stream().collect(Collectors.groupingBy(Person::getSex, Collectors.groupingBy(Person::getArea)));
-    System.out.println("员工按薪资是否大于8000分组情况：" + part);
-    System.out.println("员工按性别分组情况：" + group);
-    System.out.println("员工按性别、地区：" + group2);
-  ```
-  ##### 接合(joining)
   joining可以将stream中的元素用特定的连接符（没有的话，则直接连接）连接成一个字符串。
   ```java
       List<Person> personList = new ArrayList<Person>();
@@ -512,6 +496,7 @@ collect主要依赖java.util.stream.Collectors类内置的静态方法。
 		System.out.println("先按工资再按年龄自定义降序排序：" + newList4);
   ```
 #### 提取/组合
+
 流也可以进行合并、去重、限制、跳过等操作。
 ```java
   String[] arr1 = { "a", "b", "c", "d" };
