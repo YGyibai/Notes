@@ -178,7 +178,7 @@ public class Test {
 | parameterType  | 表示传入 SQL 语句的参数类型的全限定名或别名。它是一个可选属性，MyBatis 能推断出具体传入语句的参数 |
 | resultType     | SQL 语句执行后返回的类型（全限定名或者别名）。如果是集合类型，返回的是集合元素的类型，返回时可以使用 resultType 或 resultMap 之一 |
 | resultMap      | 它是映射集的引用，与 <resultMap> 元素一起使用，返回时可以使用 resultType 或 resultMap 之一 |
-| ==flushCache== | 用于设置在调用 SQL 语句后是否要求 MyBatis 清空之前查询的本地缓存和二级缓存，默认值为 false，如果设置为 true，则任何时候只要 SQL 语句被调用都将清空本地缓存和二级缓存 |
+| ==flushCache== | 用于设置在调用 SQL 语句后是否要求 MyBatis 清空之前查询的本地缓存和二级缓存，默认值为 false，如果设         置为 true，则任何时候只要 SQL 语句被调用都将清空本地缓存和二级缓存 |
 | ==useCache==   | 启动二级缓存的开关，默认值为 true，表示将査询结果存入二级缓存中 |
 | timeout        | 用于设置超时参数，单位是秒（s），超时将抛出异常              |
 | fetchSize      | 获取记录的总条数设定                                         |
